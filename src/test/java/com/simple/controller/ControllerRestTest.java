@@ -1,5 +1,7 @@
 package com.simple.controller;
 
+import com.google.gson.Gson;
+import com.simple.model.Coche;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -7,10 +9,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class ControllerRestTest {
+
+    List<Coche> listCoche = new ArrayList<>();
+    private List<Coche> methodCreation(){
+        for(int i=1; i<5; i++){
+            listCoche.add(new Coche(i,"model-"+""+i+""));
+        }
+        return listCoche;
+    }
+
+    private String methodCreation(int j){
+        for(int i=1; i<5; i++){
+            listCoche.add(new Coche(i,"model-"+""+i+""));
+        }
+        return listCoche.get(j).toString();
+    }
+
 
     @Test
     void testStateRestBuilderAll(){
@@ -22,11 +43,9 @@ public class ControllerRestTest {
         ResponseEntity<String> responseEntity = new RestTemplate().exchange(requestEntity, String.class);
         String response = responseEntity.getBody();
 
-        assertEquals("[{\"id\":1,\"tipo\":\"model-1\"}" +
-                ",{\"id\":2,\"tipo\":\"model-2\"},{\"id\":3,\"tipo\":\"model-3\"}" +
-                ",{\"id\":4,\"tipo\":\"model-4\"}]"
-                ,response);
-
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(methodCreation());
+        assertEquals(jsonString,response);
     }
 
 
@@ -39,7 +58,7 @@ public class ControllerRestTest {
         ResponseEntity<String> responseEntity = new RestTemplate().exchange(requestEntity, String.class);
         String response = responseEntity.getBody();
 
-        assertEquals("Coche(id=2, tipo=model-2)",response);
+        assertEquals(methodCreation(1),response);
 
     }
 
