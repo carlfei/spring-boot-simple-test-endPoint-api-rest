@@ -51,14 +51,15 @@ public class ControllerRestTest {
 
     @Test
     void testStateRestBuilderId(){
+        int indice = 1;
         URI uri = UriComponentsBuilder
-                .fromHttpUrl("http://127.0.0.1:9090/coches/1")
+                .fromHttpUrl("http://127.0.0.1:9090/coches/"+""+indice)
                 .build().encode().toUri();
         RequestEntity<Object> requestEntity = new RequestEntity<>(HttpMethod.GET, uri);
         ResponseEntity<String> responseEntity = new RestTemplate().exchange(requestEntity, String.class);
         String response = responseEntity.getBody();
 
-        assertEquals(methodCreation(1),response);
+        assertEquals(methodCreation(indice),response);
 
     }
 
